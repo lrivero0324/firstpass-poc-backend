@@ -1,0 +1,392 @@
+{
+  "name": "FirstPass Employer-First Career Platform POC API",
+  "version": "1.0.0",
+  "description": "REST API endpoints for searching candidates and sending time-sensitive interview invitations.",
+  "baseUrl": "http://127.0.0.1:8000/api",
+  "endpoints": [
+    {
+      "id": "health",
+      "name": "Health check",
+      "method": "GET",
+      "path": "/api/health/",
+      "auth": false,
+      "description": "Returns service status for uptime checks.",
+      "queryParams": [],
+      "requestBody": null,
+      "successStatus": 200,
+      "responseExample": {
+        "status": "ok",
+        "service": "employer-first-poc"
+      }
+    },
+    {
+      "id": "list-candidates",
+      "name": "List / search candidates",
+      "method": "GET",
+      "path": "/api/candidates/",
+      "auth": false,
+      "description": "Returns candidate profiles. Supports employer-side filtering by skill, location, preferred role, and work arrangement.",
+      "queryParams": [
+        {
+          "name": "skill",
+          "type": "string",
+          "required": false,
+          "description": "Case-insensitive match against a skill in the candidate skills list (e.g. React)."
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "required": false,
+          "description": "Case-insensitive substring match on location."
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "required": false,
+          "description": "Case-insensitive substring match on preferred_role."
+        },
+        {
+          "name": "work_arrangement",
+          "type": "string",
+          "required": false,
+          "enum": ["remote", "hybrid", "onsite"],
+          "description": "Exact match on preferred work arrangement."
+        },
+        {
+          "name": "min_experience",
+          "type": "integer",
+          "required": false,
+          "description": "Minimum years of experience (inclusive)."
+        },
+        {
+          "name": "max_salary",
+          "type": "integer",
+          "required": false,
+          "description": "Only candidates whose preferred_salary_min is less than or equal to this value."
+        }
+      ],
+      "requestBody": null,
+      "successStatus": 200,
+      "responseExample": [
+        {
+          "id": 1,
+          "full_name": "Alex Rivera",
+          "headline": "Junior Frontend Developer",
+          "location": "Miami, FL",
+          "skills": ["React", "JavaScript", "CSS", "Accessibility"],
+          "experience_years": 2,
+          "education": "B.S. Information Technology - FIU",
+          "preferred_role": "Frontend Developer",
+          "preferred_salary_min": 70000,
+          "preferred_work_arrangement": "hybrid",
+          "summary": "Builds clean, accessible interfaces...",
+          "portfolio_url": "https://example.com/alex"
+        }
+      ]
+    },
+    {
+      "id": "get-candidate",
+      "name": "Get candidate detail",
+      "method": "GET",
+      "path": "/api/candidates/{id}/",
+      "auth": false,
+      "description": "Returns a single candidate profile by id.",
+      "pathParams": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": true,
+          "description": "Candidate primary key."
+        }
+      ],
+      "queryParams": [],
+      "requestBody": null,
+      "successStatus": 200,
+      "responseExample": {
+        "id": 1,
+        "full_name": "Alex Rivera",
+        "headline": "Junior Frontend Developer",
+        "location": "Miami, FL",
+        "skills": ["React", "JavaScript", "CSS", "Accessibility"],
+        "experience_years": 2,
+        "education": "B.S. Information Technology - FIU",
+        "preferred_role": "Frontend Developer",
+        "preferred_salary_min": 70000,
+        "preferred_work_arrangement": "hybrid",
+        "summary": "Builds clean, accessible interfaces...",
+        "portfolio_url": "https://example.com/alex"
+      }
+    },
+    {
+      "id": "list-employers",
+      "name": "List employers",
+      "method": "GET",
+      "path": "/api/employers/",
+      "auth": false,
+      "description": "Returns demo employer accounts used by the POC UI.",
+      "queryParams": [],
+      "requestBody": null,
+      "successStatus": 200,
+      "responseExample": [
+        {
+          "id": 1,
+          "name": "Maya Chen",
+          "company": "Northstar Digital",
+          "title": "Talent Partner"
+        }
+      ]
+    },
+    {
+      "id": "get-employer",
+      "name": "Get employer detail",
+      "method": "GET",
+      "path": "/api/employers/{id}/",
+      "auth": false,
+      "description": "Returns a single employer by id.",
+      "pathParams": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": true,
+          "description": "Employer primary key."
+        }
+      ],
+      "queryParams": [],
+      "requestBody": null,
+      "successStatus": 200,
+      "responseExample": {
+        "id": 1,
+        "name": "Maya Chen",
+        "company": "Northstar Digital",
+        "title": "Talent Partner"
+      }
+    },
+    {
+      "id": "list-invitations",
+      "name": "List interview invitations",
+      "method": "GET",
+      "path": "/api/invitations/",
+      "auth": false,
+      "description": "Lists invitations. Refreshes expiration status for pending/saved items that have passed expires_at.",
+      "queryParams": [
+        {
+          "name": "candidate",
+          "type": "integer",
+          "required": false,
+          "description": "Filter by candidate id."
+        },
+        {
+          "name": "employer",
+          "type": "integer",
+          "required": false,
+          "description": "Filter by employer id."
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "enum": ["pending", "accepted", "saved", "declined", "expired"],
+          "description": "Filter by invitation status."
+        }
+      ],
+      "requestBody": null,
+      "successStatus": 200,
+      "responseExample": [
+        {
+          "id": 1,
+          "candidate": {
+            "id": 1,
+            "full_name": "Alex Rivera",
+            "headline": "Junior Frontend Developer",
+            "location": "Miami, FL",
+            "skills": ["React", "JavaScript"],
+            "experience_years": 2,
+            "education": "B.S. Information Technology - FIU",
+            "preferred_role": "Frontend Developer",
+            "preferred_salary_min": 70000,
+            "preferred_work_arrangement": "hybrid",
+            "summary": "...",
+            "portfolio_url": "https://example.com/alex"
+          },
+          "employer": {
+            "id": 1,
+            "name": "Maya Chen",
+            "company": "Northstar Digital",
+            "title": "Talent Partner"
+          },
+          "role_title": "Frontend Developer",
+          "role_summary": "Build React interfaces for our customer portal.",
+          "salary_min": 75000,
+          "salary_max": 90000,
+          "work_arrangement": "hybrid",
+          "reason_for_interest": "Strong React and accessibility skills match our opening.",
+          "status": "pending",
+          "expires_at": "2026-09-06T17:00:00Z",
+          "created_at": "2026-08-30T17:00:00Z",
+          "responded_at": null
+        }
+      ]
+    },
+    {
+      "id": "get-invitation",
+      "name": "Get invitation detail",
+      "method": "GET",
+      "path": "/api/invitations/{id}/",
+      "auth": false,
+      "description": "Returns one invitation and refreshes expiration if needed.",
+      "pathParams": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": true,
+          "description": "Invitation primary key."
+        }
+      ],
+      "queryParams": [],
+      "requestBody": null,
+      "successStatus": 200,
+      "responseExample": {
+        "id": 1,
+        "candidate": { "id": 1, "full_name": "Alex Rivera" },
+        "employer": { "id": 1, "name": "Maya Chen", "company": "Northstar Digital" },
+        "role_title": "Frontend Developer",
+        "role_summary": "Build React interfaces for our customer portal.",
+        "salary_min": 75000,
+        "salary_max": 90000,
+        "work_arrangement": "hybrid",
+        "reason_for_interest": "Strong React and accessibility skills match our opening.",
+        "status": "pending",
+        "expires_at": "2026-09-06T17:00:00Z",
+        "created_at": "2026-08-30T17:00:00Z",
+        "responded_at": null
+      }
+    },
+    {
+      "id": "create-invitation",
+      "name": "Create interview invitation",
+      "method": "POST",
+      "path": "/api/invitations/",
+      "auth": false,
+      "description": "Employer sends a structured interview invitation to a candidate. Requires transparent role details. Sets expires_at from expires_in_days (default 7).",
+      "queryParams": [],
+      "requestBody": {
+        "contentType": "application/json",
+        "required": true,
+        "schema": {
+          "employer_id": { "type": "integer", "required": true },
+          "candidate_id": { "type": "integer", "required": true },
+          "role_title": { "type": "string", "required": true },
+          "role_summary": { "type": "string", "required": true },
+          "salary_min": { "type": "integer", "required": true },
+          "salary_max": { "type": "integer", "required": true, "note": "Must be >= salary_min" },
+          "work_arrangement": {
+            "type": "string",
+            "required": true,
+            "enum": ["remote", "hybrid", "onsite"]
+          },
+          "reason_for_interest": { "type": "string", "required": true },
+          "expires_in_days": {
+            "type": "integer",
+            "required": false,
+            "default": 7,
+            "minimum": 1,
+            "maximum": 30
+          }
+        },
+        "example": {
+          "employer_id": 1,
+          "candidate_id": 1,
+          "role_title": "Frontend Developer",
+          "role_summary": "Build React interfaces for our customer portal.",
+          "salary_min": 75000,
+          "salary_max": 90000,
+          "work_arrangement": "hybrid",
+          "reason_for_interest": "Strong React and accessibility skills match our opening.",
+          "expires_in_days": 5
+        }
+      },
+      "successStatus": 201,
+      "errorStatuses": {
+        "400": "Validation error (e.g. salary_max < salary_min)."
+      }
+    },
+    {
+      "id": "respond-invitation",
+      "name": "Respond to invitation",
+      "method": "POST",
+      "path": "/api/invitations/{id}/respond/",
+      "auth": false,
+      "description": "Candidate responds to an invitation. Saved invitations still expire on schedule. Accept/decline set responded_at. Expired or already finalized invitations return 400.",
+      "pathParams": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": true,
+          "description": "Invitation primary key."
+        }
+      ],
+      "queryParams": [],
+      "requestBody": {
+        "contentType": "application/json",
+        "required": true,
+        "schema": {
+          "action": {
+            "type": "string",
+            "required": true,
+            "enum": ["accept", "save", "decline"],
+            "description": "accept → accepted; save → saved; decline → declined."
+          }
+        },
+        "example": {
+          "action": "accept"
+        }
+      },
+      "successStatus": 200,
+      "errorStatuses": {
+        "400": "Invitation expired, already accepted/declined, or invalid action."
+      },
+      "responseExample": {
+        "id": 1,
+        "status": "accepted",
+        "responded_at": "2026-08-30T18:00:00Z"
+      }
+    }
+  ],
+  "models": {
+    "Candidate": {
+      "id": "integer",
+      "full_name": "string",
+      "headline": "string",
+      "location": "string",
+      "skills": "string[]",
+      "experience_years": "integer",
+      "education": "string",
+      "preferred_role": "string",
+      "preferred_salary_min": "integer",
+      "preferred_work_arrangement": "remote | hybrid | onsite",
+      "summary": "string",
+      "portfolio_url": "string (url, optional)"
+    },
+    "Employer": {
+      "id": "integer",
+      "name": "string",
+      "company": "string",
+      "title": "string"
+    },
+    "InterviewInvitation": {
+      "id": "integer",
+      "candidate": "Candidate",
+      "employer": "Employer",
+      "role_title": "string",
+      "role_summary": "string",
+      "salary_min": "integer",
+      "salary_max": "integer",
+      "work_arrangement": "remote | hybrid | onsite",
+      "reason_for_interest": "string",
+      "status": "pending | accepted | saved | declined | expired",
+      "expires_at": "datetime (ISO 8601)",
+      "created_at": "datetime (ISO 8601)",
+      "responded_at": "datetime | null"
+    }
+  }
+}

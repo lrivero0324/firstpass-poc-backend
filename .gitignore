@@ -1,0 +1,14 @@
+﻿venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+db.sqlite3
+.env
+staticfiles/
+.DS_Store
+*.log
+deploy-files*.json
+deploy-file-list.txt
+_make_*.py
+_summarize_deploy.py
+.vercel/
