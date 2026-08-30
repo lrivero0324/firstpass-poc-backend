@@ -1,8 +1,8 @@
-﻿# FirstPass â€” Employer-First Career Platform POC (Backend)
+﻿# FirstPass Employer-First Career Platform POC (Backend)
 
 Django REST API for **FirstPass**, a proof of concept for an employer-first career platform where recruiters search candidate profiles and send interview invitations *before* candidates submit traditional applications.
 
-**Companion frontend:** [mc6950-rivero-lauren-assignment1.2-frontend](https://github.com/lrivero0324/mc6950-rivero-lauren-assignment1.2-frontend)
+**Companion frontend:** [firstpass-poc-frontend](https://github.com/lrivero0324/firstpass-poc-frontend)
 
 ---
 
@@ -137,27 +137,7 @@ Full request/response schemas are in [`api.json`](./api.json).
 4. **Start command:** `python manage.py migrate --noinput && python manage.py seed_demo && gunicorn config.wsgi:application`
 5. Set `SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS=.onrender.com`.
 
-One-click blueprint (if logged into Render):
 
-https://render.com/deploy?repo=https://github.com/lrivero0324/mc6950-rivero-lauren-assignment1.2-backend
-
----
-
-## Project structure
-
-```
-â”œâ”€â”€ api/                 # Models, views, serializers, seed command
-â”œâ”€â”€ api.json             # Endpoint catalog (this file documents the API)
-â”œâ”€â”€ config/              # Django settings & URLs
-â”œâ”€â”€ frontend_dist/       # Built React UI served at /
-â”œâ”€â”€ manage.py
-â”œâ”€â”€ requirements.txt
-â”œâ”€â”€ Procfile
-â””â”€â”€ render.yaml
-```
-
-## Course / author
-Lauren A. Rivero â€” MMC 6950 Capstone Â· University of Florida Â· Assignment 1.2 POC
 
 ## Auto-deploy note
 
